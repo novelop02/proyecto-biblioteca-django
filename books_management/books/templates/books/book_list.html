@@ -1,0 +1,116 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Mis Libros - Mi Biblioteca{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="fw-bold text-dark mb-1">
+      <i class="fa-solid fa-book text-warning me-2"></i>Mis Libros
+    </h2>
+    <p class="text-muted small mb-0">Colección personal de {{ user.username }}</p>
+  </div>
+  <a href="{% url 'books:create_book' %}" class="btn btn-warning fw-semibold px-3 py-2 rounded-3 shadow-sm">
+    <i class="fa-solid fa-plus me-1"></i> Añadir Libro
+  </a>
+</div>
+
+<!-- Listado de Tarjetas -->
+<div class="row g-4">
+  {% for book in page_obj %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 d-flex flex-column">
+          
+          <!-- Categoría y Estado (Badges) -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge bg-primary-subtle text-primary fw-medium px-2.5 py-1.5 rounded-pill">
+              <i class="fa-solid fa-tag me-1"></i>{{ book.category.title }}
+            </span>
+            <span class="badge bg-secondary-subtle text-dark fw-medium px-2.5 py-1.5 rounded-pill">
+              <i class="fa-solid fa-info-circle me-1"></i>{{ book.state.title }}
+            </span>
+          </div>
+
+          <!-- Título del libro -->
+          <h5 class="card-title fw-bold text-dark mb-2">{{ book.title }}</h5>
+
+          <!-- Descripción -->
+          <p class="card-text text-muted flex-grow-1 small">
+            {% if book.description %}
+              {{ book.description|truncatewords:25 }}
+            {% else %}
+              <em class="text-black-50">Sin descripción disponible.</em>
+            {% endif %}
+          </p>
+
+          <!-- Acciones / Botones Ver Detalle y Editar -->
+          <div class="pt-3 mt-3 border-top d-flex justify-content-end gap-2">
+            <a href="{% url 'books:book_detail' book.id %}" class="btn btn-outline-info btn-sm px-3 rounded-2 fw-medium">
+              <i class="fa-solid fa-eye me-1"></i> Ver Detalles
+            </a>
+            <a href="{% url 'books:update_book' book.id %}" class="btn btn-outline-warning btn-sm px-3 rounded-2 fw-medium">
+              <i class="fa-solid fa-pen-to-square me-1"></i> Editar
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <!-- Estado vacío -->
+    <div class="col-12 text-center py-5">
+      <div class="p-5 bg-white rounded-4 shadow-sm">
+        <i class="fa-solid fa-books fs-1 text-muted mb-3 d-block"></i>
+        <h4 class="fw-bold text-secondary">Aún no has agregado ningún libro</h4>
+        <p class="text-muted">Comienza a registrar tu biblioteca personal haciendo clic en el botón de abajo.</p>
+        <a href="{% url 'books:create_book' %}" class="btn btn-warning fw-semibold px-4 rounded-3 mt-2">
+          <i class="fa-solid fa-plus me-1"></i> Añadir mi primer libro
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Controles de Paginación -->
+{% if is_paginated %}
+<nav aria-label="Navegación de páginas" class="mt-5">
+  <ul class="pagination justify-content-center">
+    
+    <!-- Botón Anterior -->
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link text-dark shadow-sm rounded-start-3" href="?page={{ page_obj.previous_page_number }}">
+          <i class="fa-solid fa-chevron-left me-1"></i> Anterior
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link rounded-start-3"><i class="fa-solid fa-chevron-left me-1"></i> Anterior</span>
+      </li>
+    {% endif %}
+
+    <!-- Indicador de página -->
+    <li class="page-item disabled">
+      <span class="page-link text-muted fw-medium">
+        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+      </span>
+    </li>
+
+    <!-- Botón Siguiente -->
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link text-dark shadow-sm rounded-end-3" href="?page={{ page_obj.next_page_number }}">
+          Siguiente <i class="fa-solid fa-chevron-right ms-1"></i>
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link rounded-end-3">Siguiente <i class="fa-solid fa-chevron-right ms-1"></i></span>
+      </li>
+    {% endif %}
+
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ book.title }} - Detalle del Libro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-10 col-lg-8">
+    
+    <!-- Botón para regresar al listado -->
+    <div class="mb-3">
+      <a href="{% url 'books:book_list' %}" class="text-decoration-none text-secondary small fw-medium">
+        <i class="fa-solid fa-arrow-left me-1"></i> Volver a Mis Libros
+      </a>
+    </div>
+
+    <!-- Tarjeta de Detalle -->
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4 p-md-5">
+        
+        <!-- Categoría y Estado -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <span class="badge bg-primary-subtle text-primary fw-medium px-3 py-2 rounded-pill fs-6">
+            <i class="fa-solid fa-tag me-1"></i>{{ book.category.title }}
+          </span>
+          <span class="badge bg-secondary-subtle text-dark fw-medium px-3 py-2 rounded-pill fs-6">
+            <i class="fa-solid fa-info-circle me-1"></i>{{ book.state.title }}
+          </span>
+        </div>
+
+        <!-- Título -->
+        <h1 class="h2 fw-bold text-dark mb-4">{{ book.title }}</h1>
+
+        <hr class="text-muted opacity-25 mb-4">
+
+        <!-- Descripción -->
+        <div class="mb-4">
+          <h6 class="text-uppercase text-muted fw-bold small mb-2">Descripción</h6>
+          {% if book.description %}
+            <p class="text-secondary leading-relaxed fs-6 mb-0" style="white-space: pre-line;">{{ book.description }}</p>
+          {% else %}
+            <p class="text-muted fst-italic mb-0">Este libro no cuenta con una descripción registrada.</p>
+          {% endif %}
+        </div>
+
+        <hr class="text-muted opacity-25 my-4">
+
+        <!-- Botones de Acción (Editar y Eliminar) -->
+        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 pt-2">
+          
+          <!-- Botón Editar -->
+          <a href="{% url 'books:update_book' book.id %}" class="btn btn-outline-warning px-4 rounded-3 fw-semibold">
+            <i class="fa-solid fa-pen-to-square me-1"></i> Editar
+          </a>
+
+          <!-- Botón Eliminar (Redirige a la vista de confirmación) -->
+          <a href="{% url 'books:book_delete' book.id %}" class="btn btn-outline-danger px-4 rounded-3 fw-semibold">
+            <i class="fa-solid fa-trash-can me-1"></i> Eliminar
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

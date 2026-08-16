@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %} {% block title %}Añadir Nuevo Libro - Mi
+Biblioteca{% endblock %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-header bg-white border-0 pt-4 px-4">
+        <h2 class="h4 fw-bold text-dark mb-0">
+          <i class="fa-solid fa-plus-circle text-warning me-2"></i>Añadir Nuevo
+          Libro
+        </h2>
+        <p class="text-muted small mb-0">
+          Ingresa los detalles del libro para registrarlo en tu biblioteca.
+        </p>
+      </div>
+
+      <div class="card-body p-4">
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- Título del libro -->
+          <div class="mb-3">
+            <label for="id_title" class="form-label fw-semibold"
+              >Título del Libro</label
+            >
+            {{ form.title }} {% for error in form.title.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-3">
+            <label for="id_description" class="form-label fw-semibold"
+              >Descripción</label
+            >
+            {{ form.description }} {% for error in form.description.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <!-- Selección de Categoría y Estado -->
+          <div class="row g-3 mb-4">
+            <div class="col-12 col-md-6">
+              <label for="id_category" class="form-label fw-semibold"
+                >Categoría</label
+              >
+              {{ form.category }} {% for error in form.category.errors %}
+              <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label for="id_state" class="form-label fw-semibold"
+                >Estado</label
+              >
+              {{ form.state }} {% for error in form.state.errors %}
+              <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Botones de Acción -->
+          <div class="d-flex align-items-center justify-content-end gap-2 pt-2">
+            <a
+              href="{% url 'core:home' %}"
+              class="btn btn-outline-secondary px-4 rounded-3 fw-medium"
+            >
+              Cancelar
+            </a>
+            <button
+              type="submit"
+              class="btn btn-warning px-4 rounded-3 fw-semibold shadow-sm"
+            >
+              <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Libro
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
